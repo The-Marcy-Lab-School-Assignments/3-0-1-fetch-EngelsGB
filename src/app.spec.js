@@ -138,7 +138,7 @@ describe(testSuiteName, () => {
     await waitForRenders()
     const fullNewUserDiv = builtApp.querySelector('#new-user');
     expect(fullNewUserDiv.children.length).toBe(2);
-
+    
     const newUserHeading = builtApp.querySelector('#new-user h2');
     expect(newUserHeading.textContent).toBe(newUserFormData.username);
 

@@ -13,40 +13,30 @@ import {
 } from './fetch-functions.js';
 
 export default function app(appDiv) {
-  // Basic page setup
-  const basics = setupPageBasics(appDiv);
-  // Status
-  checkResponseStatus()
-    .then((response) => {
-      renderStatus(basics.statusDiv, response);
-    })
-  // Users
-  getUsers()
-    .then((response) => {
-      renderUsers(basics.usersUl, response);
-      document.querySelectorAll(".user-card").forEach((button) => button.addEventListener('click', (e) => {
-        if (e.target.matches("button")) {
-          const id = e.target.getAttribute("data-user-id");
-          getUserPosts(id, 3)
-            .then((response) => {
-              renderPosts(basics.postsUl, response);
-            });
-        }
-      }));
-    })
-  // Form
-  basics.newUserForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (document.querySelector('#username') && document.querySelector('#email')) {
-      const obj = {
-        username: document.querySelector('#username').value,
-        email: document.querySelector('#email').value
-      }
-      createNewUser(obj)
-        .then((response) => {
-          renderNewUser(basics.newUserDiv, response);
+  const page = setupPageBasics(appDiv); // Set up the page
+  checkResponseStatus() // Call check status
+    .then((statusData) => renderStatus(page.statusDiv, statusData)) // Render the status
+    .then(() => getUsers()) // Call getUsers
+    .then((usersData) => {renderUsers(page.usersUl, usersData);}) // Render the users
+    .then(() => { // Event listeners for the buttons
+      for (let i = 0; i < page.usersUl.children.length; i++) {
+        page.usersUl.children[i].addEventListener('click', (e) => {
+          if (e.target.matches("button")) {
+            getUserPosts(e.target.getAttribute("data-user-id"), 3)
+              .then((postsData) => {renderPosts(page.postsUl, postsData)}) // render posts
+          }
         })
-      e.target.reset();
-    }
-  });
+      }
+    })
+    .then(() => {
+      page.newUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const formObject = Object.fromEntries(formData);
+        console.log(formObject);
+        createNewUser(formObject)
+          .then((newUserData) => {renderNewUser(page.newUserDiv, newUserData)}) // Render form values
+        e.target.reset();
+        });
+    })
 }
