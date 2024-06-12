@@ -28,15 +28,13 @@ export default function app(appDiv) {
         })
       }
     })
-    .then(() => {
-      page.newUserForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const formObject = Object.fromEntries(formData);
-        console.log(formObject);
-        createNewUser(formObject)
-          .then((newUserData) => {renderNewUser(page.newUserDiv, newUserData)}) // Render form values
-        e.target.reset();
-        });
-    })
+  page.newUserForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formObject = Object.fromEntries(formData);
+    console.log(formObject);
+    createNewUser(formObject)
+      .then((newUserData) => {renderNewUser(page.newUserDiv, newUserData)}) // Render form values
+    e.target.reset();
+  });
 }

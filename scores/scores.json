@@ -69,13 +69,13 @@
       "ApTe1": 1,
       "ApTe2": 1,
       "ApTe3": 1,
-      "ApTe4": 0
+      "ApTe4": 1
     }
   },
   "humanReadable": {
     "Render Functions Tests": "8/8",
-    "finalTestScore": "FINAL SCORE: 19/20",
+    "finalTestScore": "FINAL SCORE: 20/20",
     "Fetch Function Tests": "8/8",
-    "App Tests": "3/4"
+    "App Tests": "4/4"
   }
 }
