@@ -13,28 +13,28 @@ import {
 } from './fetch-functions.js';
 
 export default function app(appDiv) {
-  const page = setupPageBasics(appDiv); // Set up the page
-  checkResponseStatus() // Call check status
-    .then((statusData) => renderStatus(page.statusDiv, statusData)) // Render the status
-    .then(() => getUsers()) // Call getUsers
-    .then((usersData) => {renderUsers(page.usersUl, usersData);}) // Render the users
-    .then(() => { // Event listeners for the buttons
-      for (let i = 0; i < page.usersUl.children.length; i++) {
-        page.usersUl.children[i].addEventListener('click', (e) => {
-          if (e.target.matches("button")) {
-            getUserPosts(e.target.getAttribute("data-user-id"), 3)
-              .then((postsData) => {renderPosts(page.postsUl, postsData)}) // render posts
-          }
-        })
+  const page = setupPageBasics(appDiv); // Set up the page and get the divs.
+  checkResponseStatus() // Get status.
+  .then((statusData) => renderStatus(page.statusDiv, statusData)) // Get the status data and render it.
+  .then(() => getUsers()) // Get users array.
+  .then((usersData) => {renderUsers(page.usersUl, usersData);}) // Get the users data and render it.
+  .then(() => {
+    page.usersUl.addEventListener('click', (event) => { // Add event listener on the ul for event delegation.
+      if(event.target.matches('button')) { // Check if the clicked element is a button.
+        getUserPosts(event.target.dataset.userId, 3) // Call get user posts with the user id from the button.
+        .then((postsData) => {renderPosts(page.postsUl, postsData)}) // Get the user posts data and render it.
       }
-    })
-  page.newUserForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const formObject = Object.fromEntries(formData);
-    console.log(formObject);
-    createNewUser(formObject)
-      .then((newUserData) => {renderNewUser(page.newUserDiv, newUserData)}) // Render form values
-    e.target.reset();
+    });
+  })
+  page.newUserForm.addEventListener('submit', (event) => { // Event listener is sync code because submit events can't be async without using await keyword.
+    event.preventDefault(); // Stop the form from refreshing
+    // const form = event.target;
+    // const formData = new FormData(form);
+    // const formObject = Object.fromEntries(formData);
+    // createNewUser(formObject)
+    // The previous lines ^ smushed into one:
+    createNewUser(Object.fromEntries(new FormData(event.target))) // Create the new user using the form data.
+    .then((newUserData) => {renderNewUser(page.newUserDiv, newUserData)}) // Render the new user.
+    event.target.reset(); // Reset the form.
   });
 }

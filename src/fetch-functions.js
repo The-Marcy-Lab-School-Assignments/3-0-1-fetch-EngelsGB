@@ -2,13 +2,8 @@ const userUrl = 'https://jsonplaceholder.typicode.com/users'
 
 export const checkResponseStatus = () => {
     return fetch(userUrl)
-        .then((response) => {
-            const obj = {
-                "status": response.status,
-                "ok": response.ok,
-                "url": response.url
-            }
-            return obj;
+        .then(({ status, ok, url }) => {
+            return { status, ok, url };
         });
 };
 
@@ -19,9 +14,8 @@ export const getUsers = () => {
         });
 };
 
-export const getUserPosts = (userId, maxNumPosts) => {
-    if (!maxNumPosts) maxNumPosts = 3;
-    return fetch(`https://jsonplaceholder.typicode.com/users/${userId}/posts`)
+export const getUserPosts = (userId, maxNumPosts = 3) => {
+    return fetch(`${userUrl}/${userId}/posts`)
         .then((response) => {
             return response.json();
         })
@@ -40,7 +34,6 @@ export const createNewUser = (newUserData) => {
             "Content-Type": "application/json"
         }  
     }
-
     return fetch(userUrl, postOption)
         .then((response) => {
             return response.json();

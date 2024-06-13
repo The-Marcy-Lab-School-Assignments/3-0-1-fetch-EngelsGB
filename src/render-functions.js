@@ -31,15 +31,22 @@ export const setupPageBasics = (parentEl) => {
 };
 
 export const renderStatus = (statusDiv, statusInfoObj) => {
-  statusDiv.innerHTML = '';
-  const h2 = document.createElement('h2');
-  h2.id = "status-heading";
-  h2.textContent = `Info on - ${statusInfoObj.url}`;
-  const p = document.createElement('p');
-  p.id = "status-code";
-  if (statusInfoObj.ok === true) p.textContent = `Status code: ${statusInfoObj.status}, OK!`;
-  else p.textContent = `Status code: ${statusInfoObj.status}, FAIL!`;
-  statusDiv.append(h2, p);
+  let str = '';
+  if (statusInfoObj.ok) str = 'OK';
+  else str = 'FAIL';
+  statusDiv.innerHTML = `
+  <h2 id="status-heading">Info on - ${statusInfoObj.url}</h2>
+  <p id="status-code">Status code: ${statusInfoObj.status}, ${str}!</p>
+  `;
+  // statusDiv.innerHTML = '';
+  // const h2 = document.createElement('h2');
+  // h2.id = "status-heading";
+  // h2.textContent = `Info on - ${statusInfoObj.url}`;
+  // const p = document.createElement('p');
+  // p.id = "status-code";
+  // if (statusInfoObj.ok) p.textContent = `Status code: ${statusInfoObj.status}, OK!`;
+  // else p.textContent = `Status code: ${statusInfoObj.status}, FAIL!`;
+  // statusDiv.append(h2, p);
 }
 
 export const renderUsers = (usersUl, users) => {
@@ -48,7 +55,7 @@ export const renderUsers = (usersUl, users) => {
     const li = document.createElement('li');
     li.classList.add("user-card");
     const button = document.createElement('button');
-    button.setAttribute("data-user-id", user.id);
+    button.dataset.userId = user.id;
     button.textContent = `Load ${user.username}'s posts`;
     li.append(button);
     usersUl.append(li);
@@ -69,10 +76,14 @@ export const renderPosts = (postsUl, posts) => {
 }
 
 export const renderNewUser = (newUserDiv, newUserInfo) => {
-  newUserDiv.innerHTML = '';
-  const h2 = document.createElement('h2');
-  h2.textContent = newUserInfo.username;
-  const p = document.createElement('p');
-  p.textContent = newUserInfo.email;
-  newUserDiv.append(h2, p);
+  newUserDiv.innerHTML = `
+  <h2>${newUserInfo.username}</h2>
+  <p>${newUserInfo.email}</p>
+  `;
+  // newUserDiv.innerHTML = '';
+  // const h2 = document.createElement('h2');
+  // h2.textContent = newUserInfo.username;
+  // const p = document.createElement('p');
+  // p.textContent = newUserInfo.email;
+  // newUserDiv.append(h2, p);
 }
